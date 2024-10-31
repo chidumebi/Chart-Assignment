@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,10 @@ namespace Pie_Chart_Assignment
 {
     public partial class Form1 : Form
     {
+        // dictionary to store name and value pair from datagridview table
+        public Dictionary<string, double> table = new Dictionary<string, double>();
+        public Random rand = new Random(); // random class to get color
+        private List<Color> segmentColors = new List<Color>(); // list to keep record of random colors
         public Form1()
         {
             InitializeComponent();
@@ -42,6 +47,63 @@ namespace Pie_Chart_Assignment
             dataGridView1.Location = new Point(this.ClientSize.Width - dataGridView1.Width - 20, 50);
             loadGraph.Location = new Point(this.ClientSize.Width - (dataGridView1.Width / 2), 350);
             editGraph.Location = new Point(this.ClientSize.Width - (dataGridView1.Width) - 30, 350);
+        }
+
+        private void loadGraph_Click(object sender, EventArgs e)
+        {
+            string nameCol, valueCol;
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (!row.IsNewRow) // check if row is for new records
+                {
+                    nameCol = (string)row.Cells["NameColumn"].Value;
+                    valueCol = (string)row.Cells["ValueColumn"].Value;
+
+                    // Check if nameCol and valueCol are not null or empty
+                    if (!string.IsNullOrEmpty(nameCol) && double.TryParse(valueCol, out double parsedValue))
+                    {
+                        // check if name col and value col already exists then just replace the valuecol
+                        if (table.ContainsKey(nameCol))
+                        {
+                            table[nameCol] = parsedValue;
+                        }
+
+                        else // else create new name and value pair
+                        {
+                            table.Add(nameCol, parsedValue);
+                        }
+                    }
+                }
+            }
+
+            //clear list of initial colors when graph is redrawn
+            segmentColors.Clear();
+            pictureBox.Invalidate(); //makes picturebox redrawn
+            pictureBox.Paint -= DrawPieRectangle; // Unsubscribe previous event handler if necessary
+
+            //subscribe event handlers
+            pictureBox.Paint += DrawPieRectangle;
+            pictureBox.Paint += DrawStringFloatFormat;
+            pictureBox.Paint += DrawLegend;
+            dataGridView1.Hide(); //hide datagrid view when graph is loaded
+        }
+
+        protected void DrawPieRectangle(Object Sender, PaintEventArgs e)
+        {
+
+
+        }
+
+        protected void DrawStringFloatFormat(Object Sender, PaintEventArgs e)
+        {
+
+
+        }
+
+        protected void DrawLegend(Object Sender, PaintEventArgs e)
+        {
+
+
         }
     }
 }
