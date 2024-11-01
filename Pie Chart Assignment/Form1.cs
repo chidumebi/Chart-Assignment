@@ -126,13 +126,37 @@ namespace Pie_Chart_Assignment
 
         protected void DrawStringFloatFormat(Object Sender, PaintEventArgs e)
         {
+            float startAngle = 0.0F;
+            float sweepAngle = 0.0F;
+            var total = table.Sum(v => v.Value);
+            float textOffset = 90.0F;
 
+            foreach (var name in table)
+            {
+                string drawString = name.Key;
+                double percent = (name.Value / total) * 360;
+                sweepAngle = (float)percent;
+                float midAngle = startAngle + (sweepAngle / 2);
+                float midAngleRadians = midAngle * (float)(Math.PI / 180);
+                //find position  using trigonometry
+                float x = (float)(150 + textOffset * Math.Cos(midAngleRadians));
+                float y = (float)(150 + textOffset * Math.Sin(midAngleRadians));
+                Font drawFont = new Font("Arial", 9);
+                SolidBrush drawBrush = new SolidBrush(Color.WhiteSmoke);
+                e.Graphics.DrawString(drawString, drawFont, drawBrush, x, y); // draw my string using defined parameters and positions
+                startAngle += (float)percent;  // increase startangle for next loop
+            }
 
         }
 
         protected void DrawLegend(Object Sender, PaintEventArgs e)
         {
 
+
+        }
+
+        private void editGraph_Click(object sender, EventArgs e)
+        {
 
         }
     }
