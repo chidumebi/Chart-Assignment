@@ -126,14 +126,55 @@ namespace Pie_Chart_Assignment
 
         protected void DrawStringFloatFormat(Object Sender, PaintEventArgs e)
         {
+            float startAngle = 0.0F;
+            float sweepAngle = 0.0F;
+            var total = table.Sum(v => v.Value);
+            float textOffset = 90.0F;
 
+            foreach (var name in table)
+            {
+                string drawString = name.Key;
+                double percent = (name.Value / total) * 360;
+                sweepAngle = (float)percent;
+                float midAngle = startAngle + (sweepAngle / 2);
+                float midAngleRadians = midAngle * (float)(Math.PI / 180);
+                //find position  using trigonometry
+                float x = (float)(150 + textOffset * Math.Cos(midAngleRadians));
+                float y = (float)(150 + textOffset * Math.Sin(midAngleRadians));
+                Font drawFont = new Font("Arial", 9);
+                SolidBrush drawBrush = new SolidBrush(Color.WhiteSmoke);
+                e.Graphics.DrawString(drawString, drawFont, drawBrush, x, y); // draw my string using defined parameters and positions
+                startAngle += (float)percent;  // increase startangle for next loop
+            }
 
         }
 
         protected void DrawLegend(Object Sender, PaintEventArgs e)
         {
+            //x and y position for drawing legend.
+            int legendX = 315;
+            int legendY = 120;
+            int legendItemHeight = 20; // Height of each legend item
 
+            // return smaller no of counts to use for loop / making sure both are same count.
+            int itemCount = Math.Min(segmentColors.Count, table.Count);
+            for (int i = 0; i < itemCount; i++)
+            {
+                // colored rectangle for each legend item
+                using (Brush brush = new SolidBrush(segmentColors[i]))
+                {
+                    e.Graphics.FillRectangle(brush, legendX, legendY + (legendItemHeight * i), 15, 15);
+                }
+                //  name next to the colored rectangle
+                Font font = new Font("Arial", 12);
+                SolidBrush textBrush = new SolidBrush(Color.Black);
+                e.Graphics.DrawString(table.ElementAt(i).Key, font, textBrush, legendX + 20, legendY + (legendItemHeight * i));
+            }
+        }
 
+        private void editGraph_Click(object sender, EventArgs e)
+        {
+            dataGridView1.Show(); //to show datagridview table incase of re-entering data
         }
     }
 }

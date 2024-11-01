@@ -74,6 +74,7 @@
             this.editGraph.TabIndex = 7;
             this.editGraph.Text = "Edit";
             this.editGraph.UseVisualStyleBackColor = false;
+            this.editGraph.Click += new System.EventHandler(this.editGraph_Click);
             // 
             // dataGridView1
             // 
