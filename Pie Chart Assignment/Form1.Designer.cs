@@ -54,6 +54,7 @@
             this.loadGraph.TabIndex = 4;
             this.loadGraph.Text = "Generate";
             this.loadGraph.UseVisualStyleBackColor = false;
+            this.loadGraph.Click += new System.EventHandler(this.loadGraph_Click);
             // 
             // Data_lbl
             // 
@@ -73,6 +74,7 @@
             this.editGraph.TabIndex = 7;
             this.editGraph.Text = "Edit";
             this.editGraph.UseVisualStyleBackColor = false;
+            this.editGraph.Click += new System.EventHandler(this.editGraph_Click);
             // 
             // dataGridView1
             // 
