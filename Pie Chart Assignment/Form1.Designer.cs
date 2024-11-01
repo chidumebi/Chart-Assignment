@@ -54,6 +54,7 @@
             this.loadGraph.TabIndex = 4;
             this.loadGraph.Text = "Generate";
             this.loadGraph.UseVisualStyleBackColor = false;
+            this.loadGraph.Click += new System.EventHandler(this.loadGraph_Click);
             // 
             // Data_lbl
             // 
