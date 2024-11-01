@@ -88,10 +88,40 @@ namespace Pie_Chart_Assignment
             dataGridView1.Hide(); //hide datagrid view when graph is loaded
         }
 
+        private Color GetRandomColor()
+        {
+            //random color method
+            return Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
+        }
+
         protected void DrawPieRectangle(Object Sender, PaintEventArgs e)
         {
+            // Create rectangle.
+            Rectangle rect = new Rectangle(10, 10, 300, 300);
 
+            var total = table.Sum(v => v.Value); // total sum of all values in Dictionary table
+                                                 // start and sweep angles for creating pie segment
+            float startAngle = 0.0F;
+            float sweepAngle = 0.0F;
 
+            foreach (var name in table)
+            {
+                Color segmentColor = GetRandomColor(); // get random color
+                segmentColors.Add(segmentColor); // add to color list that will be used when drawing legends
+                double percent = (name.Value / total) * 360; // sweepangle
+                sweepAngle = (float)percent;
+
+                using (Brush brush = new SolidBrush(segmentColor))
+                {
+                    e.Graphics.FillPie(brush, rect, startAngle, sweepAngle); //fill my pie with color
+                }
+
+                using (Pen pen = new Pen(segmentColor))
+                {
+                    e.Graphics.DrawPie(pen, rect, startAngle, sweepAngle); // draw the pie
+                }
+                startAngle += (float)percent; // increase startangle for next loop
+            }
         }
 
         protected void DrawStringFloatFormat(Object Sender, PaintEventArgs e)
